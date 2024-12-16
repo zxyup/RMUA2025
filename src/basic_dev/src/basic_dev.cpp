@@ -9,6 +9,17 @@ int main(int argc, char** argv)
     ros::init(argc, argv, "basic_dev"); // 初始化ros 节点，命名为 basic
     ros::NodeHandle n; // 创建node控制句柄
     BasicDev go(&n);
+    go.takeoffDrone();
+    ros::Duration(2.0).sleep();
+    ros::Rate loop_rate(10);
+ 
+    while (ros::ok())
+    {
+        go.gostraight();
+        ros::spinOnce();
+        loop_rate.sleep();
+    }
+    ros::spin();
     return 0;
 }
 
@@ -50,13 +61,26 @@ BasicDev::BasicDev(ros::NodeHandle *nh)
     
     // takeoff_client.call(takeoff); //起飞
     // land_client.call(land); //降落
-    // reset_client.call(reset); //重置
+    reset_client.call(reset); //重置
 
-    ros::spin();
 }
 
 BasicDev::~BasicDev()
 {
+}
+
+void BasicDev::takeoffDrone()
+{
+    takeoff_client.call(takeoff);
+}
+
+void BasicDev::gostraight()
+{
+    velcmd.twist.linear.x = 2; //x方向线速度(m/s)
+    vel_publisher.publish(velcmd);
+
+    // 打印日志信息
+    ROS_INFO("Go straight");
 }
 
 void BasicDev::pose_cb(const geometry_msgs::PoseStamped::ConstPtr& msg)
@@ -86,6 +110,9 @@ void BasicDev::front_left_view_cb(const sensor_msgs::ImageConstPtr& msg)
     if(!cv_front_left_ptr->image.empty())
     {
         ROS_INFO("Get front left image.: %f", msg->header.stamp.sec + msg->header.stamp.nsec*1e-9);
+        // 显示图像
+        cv::imshow("Front Left View", cv_front_left_ptr->image);
+        cv::waitKey(1); // 等待 1ms，避免窗口卡住
     }
 }
 

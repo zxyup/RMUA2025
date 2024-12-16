@@ -73,6 +73,8 @@ private:
 public:
     BasicDev(ros::NodeHandle *nh);
     ~BasicDev();
+    void takeoffDrone();
+    void gostraight();
 
 };
 
