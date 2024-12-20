@@ -69,6 +69,8 @@ private:
     void front_left_view_cb(const sensor_msgs::ImageConstPtr& msg);
     void front_right_view_cb(const sensor_msgs::ImageConstPtr& msg);
 
+    ros::Publisher point_cloud_pub;
+
 
 public:
     BasicDev(ros::NodeHandle *nh);

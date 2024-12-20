@@ -6,9 +6,9 @@ RUN chmod +x /setup.bash
 
 USER root
 
-# RUN apt update && apt install -y python3-catkin-tools ros-noetic-geographic-msgs \
-#  ros-noetic-tf2-sensor-msgs ros-noetic-tf2-geometry-msgs ros-noetic-image-transport \
-#  net-tools
+RUN apt update && apt install -y python3-catkin-tools ros-noetic-geographic-msgs \
+ ros-noetic-tf2-sensor-msgs ros-noetic-tf2-geometry-msgs ros-noetic-image-transport \
+ net-tools
 
 ENV ROS_DISTRO noetic
 
